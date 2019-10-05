@@ -46,6 +46,7 @@ Alternatively, the data can be pushed into the input relations by using the ```i
    souffle::tuple newTuple(rel); 
 
    /// place integers / symbols into the relation using << operator
+   /// the arity and the data type of the variables have to follow the relation "<my-rel>" correspondingly.
    newTuple << "TestData" << 10; 
 
    // insert tuple into relation <rel-name>
@@ -77,10 +78,29 @@ Output relations can be accessed via the container provided by the relation.
 The current tuple provides stream operators to write data into variables.
 ```cpp
      if(souffle::Relation *rel = prog->souffle::getRelation("<my-rel>")) {
-          for(auto &output : *rel ) {
-               output >> var1 >> var2;
-            }
-      } 
+         for(auto &output : *rel ) {
+             output >> var1 >> var2;
+         }
+     } 
 ```
 Alternatively, the method ```prog->printAll()``` writes the contents of the output relations to their defined destinations. 
+
+### Check the existence of tuples in relations
+
+Check whether a tuple exists in the relation by using the ```contains()``` method.
+```cpp
+     if(souffle::Relation *rel = prog->souffle::getRelation("<my-rel>")) {
+     
+         // Create a tuple for further checking
+         tuple test(rel);
+         test << "A" << 123;
+         
+         // Check if "<my-rel>" contain a tuple {"A", 123}
+         if (rel->contains(test)) {
+             ...
+         }
+     } 
+```
+Alternatively, the method ```size()``` indicate the number of tuples in a relation, the method ```getSignature()``` return
+the attributes type of the relation.
 
